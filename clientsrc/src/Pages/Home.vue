@@ -16,10 +16,12 @@
     <div class="col-3">
       <h5>lastModified</h5>
     </div>
+    <!-- add bug component here -->
   </div>
 </template>
 
 <script>
+import bug from "../components/bug";
 export default {
   name: "home",
   data() {
@@ -30,7 +32,9 @@ export default {
   },
   computed: {},
   methods: {},
-  components: {},
+  components: {
+    bug,
+  },
 };
 </script>
 <style lang="scss">

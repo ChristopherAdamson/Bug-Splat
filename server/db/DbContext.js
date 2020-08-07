@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import ValueSchema from "../models/Value";
-import BugSchema from "../models/Bug";
+import BugSchema from "../models/Bugs";
 import NoteSchema from "../models/Note";
 import ProfileSchema from "../models/Profile";
 

@@ -43,6 +43,7 @@
         </li>
       </ul>
       <button
+        v-if="$auth.isAuthenticated"
         data-toggle="modal"
         data-target="#one"
         class="btn btn-outline-secondary mr-5"
@@ -52,10 +53,24 @@
         <button class="btn btn-danger" @click="logout" v-else>logout</button>
       </span>
     </div>
-    <QuickModal id="one" :key="one">
+    <QuickModal id="one">
       <form slot="body" @submit="reportBug">
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="What is your Bug" />
+          <input
+            type="text"
+            class="form-control w-75"
+            v-model="bugTitle"
+            placeholder="Title of the bug?"
+            required
+          />
+          <textarea
+            v-model="bugBody"
+            class="form-control box-size mt-3"
+            placeholder="short description of the bug"
+            aria-label="With textarea"
+            required
+          ></textarea>
+          <button class="btn btn-primary mt-2 float-right">Submit Bug Report</button>
         </div>
       </form>
     </QuickModal>
@@ -68,6 +83,12 @@ import axios from "axios";
 import { getUserData } from "@bcwdev/auth0-vue";
 export default {
   name: "Navbar",
+  data() {
+    return {
+      bugTitle: "",
+      bugBody: "",
+    };
+  },
   methods: {
     async login() {
       await this.$auth.loginWithPopup();
@@ -80,7 +101,16 @@ export default {
       this.$store.dispatch("resetBearer");
       await this.$auth.logout({ returnTo: window.location.origin });
     },
-    reportBug() {},
+    reportBug() {
+      $("#one").modal("hide");
+      let payload = {
+        title: this.bugTitle,
+        description: this.bugBody,
+      };
+      this.$store.dispatch("addBug", payload);
+      this.bugTitle = "";
+      this.bugBody = "";
+    },
   },
   components: {
     QuickModal,
@@ -92,5 +122,9 @@ export default {
 .img-size {
   max-height: 50px;
   max-width: 50px;
+}
+.box-size {
+  max-height: 50rem;
+  max-width: auto;
 }
 </style>

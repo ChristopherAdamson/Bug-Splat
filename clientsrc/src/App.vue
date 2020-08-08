@@ -6,6 +6,9 @@
         <router-view />
       </div>
     </div>
+    <footer
+      class="fixed-bottom bg-dark text-white text-center p-2"
+    >Created with Love by Christopher Adamson</footer>
   </div>
 </template>
 

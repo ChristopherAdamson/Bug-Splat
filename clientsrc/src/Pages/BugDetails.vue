@@ -69,6 +69,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch("getBugDetails", this.$route.params.id);
+    this.$store.dispatch("getNotes", this.$route.params.id);
   },
   computed: {
     bug() {

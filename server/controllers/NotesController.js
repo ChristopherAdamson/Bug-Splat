@@ -1,6 +1,6 @@
 import express from "express";
 import BaseController from "../utils/BaseController";
-import { notesService } from "../services/NotesService";
+import { notesService } from "../services/NoteService";
 import auth0Provider from "@bcwdev/auth0provider";
 
 export class NotesController extends BaseController {
@@ -12,7 +12,7 @@ export class NotesController extends BaseController {
     this.router
       // NOTE: Beyond this point all routes require Authorization tokens (the user must be logged in)
       .use(auth0Provider.getAuthorizedUserInfo)
-      .post("notes", this.create)
+      .post("", this.create)
 
   }
 
@@ -21,7 +21,7 @@ export class NotesController extends BaseController {
     try {
       // NOTE NEVER TRUST THE CLIENT TO ADD THE CREATOR ID
       req.body.creatorEmail = req.userInfo.email;
-      let data = await notesService.addBug(req.body)
+      let data = await notesService.addNote(req.body)
       res.send(data);
     } catch (error) {
       next(error);

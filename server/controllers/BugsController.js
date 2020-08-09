@@ -12,9 +12,8 @@ export class BugsController extends BaseController {
     super("api/bugs");
     this.router
       .get("", this.getAll)
-      // NOTE: Beyond this point all routes require Authorization tokens (the user must be logged in)
+      .get("/:bugId/notes/:noteId", this.getNotes)
       .get("/:id", this.getById)
-      .get("/:bugid/notes/:noteId", this.getNotes)
       .use(auth0Provider.getAuthorizedUserInfo)
       .post("", this.create)
       .delete("/:id", this.delete)
@@ -38,6 +37,7 @@ export class BugsController extends BaseController {
   }
   async getNotes(req, res, next) {
     try {
+      req.body.creatorEmail = req.userInfo.email;
       let data = await notesService.getNotes(req.params.bugId, req.params.noteId)
       res.send(data)
     } catch (error) {

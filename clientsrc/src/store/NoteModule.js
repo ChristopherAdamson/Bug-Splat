@@ -12,21 +12,21 @@ export default {
 
   },
   actions: {
-    async getNotes({ commit, dispatch }, payload) {
-      let res = await api.get("bugs/" + payload.bugId + "/notes")
+    async getNotes({ commit, dispatch }, bugId) {
+      let res = await api.get("bugs/" + bugId + "/notes")
       console.log(res.data);
       let data = {
-        bugId: payload.bugId,
+        bugId: bugId,
         notes: res.data
       }
-      commit("setNotes", res.data)
+      commit("setNotes", data)
     },
 
 
     async addNote({ commit, dispatch }, payload) {
       let res = await api.post("notes", payload)
       console.log(res.data);
-      dispatch("getNotes", res.data)
+      dispatch("getNotes", res.data.bugId)
     },
 
     async deleteNote({ commit, dispatch }, payload) {

@@ -33,7 +33,7 @@
         <h5 class="mr-2">Delete</h5>
       </div>
       <div class="overflow-auto note-height">
-        <!-- notes here -->
+        <noteComponent v-for="note in notes" :counter="counter++" :noteData="note" :key="note._id" />
       </div>
     </div>
     <div class="row">
@@ -68,11 +68,13 @@
 <script>
 import ns from "../services/NotificationService";
 import QuickModal from "../components/QuickModals";
+import noteComponent from "../components/Notes";
 export default {
   name: "bugDetails",
   data() {
     return {
       noteContent: "",
+      counter: 0,
     };
   },
   mounted() {
@@ -82,6 +84,9 @@ export default {
   computed: {
     bug() {
       return this.$store.state.activeBug;
+    },
+    notes() {
+      return this.$store.state.notes;
     },
   },
   methods: {
@@ -120,6 +125,7 @@ export default {
   },
   components: {
     QuickModal,
+    noteComponent,
   },
 };
 </script>

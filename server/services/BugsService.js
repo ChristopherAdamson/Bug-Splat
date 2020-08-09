@@ -31,9 +31,9 @@ class BugsService {
     } else
       return data
   }
-  async editBug(id, body, userEmail) {
+  async editBug(id, body,) {
     {
-      let data = await dbContext.Bugs.findOneAndUpdate({ _id: id, creatorEmail: userEmail }, body, { new: true })
+      let data = await dbContext.Bugs.findOneAndUpdate({ _id: id, creatorEmail: body.creatorEmail }, body, { new: true })
       if (!data) {
         throw new BadRequest("Invalid ID or you do not own this Bug");
       }

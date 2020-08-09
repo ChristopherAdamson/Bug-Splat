@@ -30,6 +30,7 @@ export default {
     },
 
     async deleteBug({ commit, dispatch }, payload) {
+      debugger
       let res = await api.delete("bugs/" + payload.bugId)
       dispatch("getBugs")
     },

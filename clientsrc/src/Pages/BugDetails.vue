@@ -6,9 +6,11 @@
         <h1>{{bug.title}}</h1>
         <h4>Reported By: {{bug.creatorEmail}}</h4>
       </div>
-      <div class="col-5 mt-auto text-right">
-        <h4 class="text-secondary mr-2" v-if="!bug.closed">Open</h4>
-        <h4 class="text-success mr-2" v-if="bug.closed">Closed</h4>
+      <div class="col-5 text-right">
+        <button @click="deleteBug" class="btn btn-warning mx-1 fixed right">Delete</button>
+        <button @click="closeReport" class="btn btn-secondary mx-1 fixed-right">Close Bug Report</button>
+        <h4 class="text-secondary mt-5 mr-2" v-if="!bug.closed">Open</h4>
+        <h4 class="text-success mt-5 mr-2" v-if="bug.closed">Closed</h4>
       </div>
     </div>
     <div class="row mt-3 ml-5">
@@ -83,6 +85,21 @@ export default {
         bugId: this.$route.params.id,
       };
       this.$store.dispatch("addNote", payload);
+    },
+    deleteBug() {
+      let payload = {
+        bugId: this.$route.params.id,
+      };
+      this.$store.dispatch("deleteBug", payload);
+
+      this.$router.push({ name: "Home" });
+    },
+    closeReport() {
+      let payload = {
+        bugId: this.$route.params.id,
+        closed: true,
+      };
+      this.$store.dispatch("editBug", payload);
     },
   },
   components: {

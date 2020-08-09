@@ -25,7 +25,7 @@ class BugsService {
     return data
   }
   async deleteBug(id) {
-    let data = await dbContext.Bugs.findOneAndDelete(id)
+    let data = await dbContext.Bugs.findOneAndDelete({ _id: id })
     if (!data) {
       throw new BadRequest("Bug Not Found")
     } else

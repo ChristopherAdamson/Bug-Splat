@@ -6,8 +6,8 @@ class NotesService {
 
 
 
-  async getNotes(bugId, noteId) {
-    let data = await dbContext.Notes.find({ _id: noteId, bugId: bugId });
+  async getNotes(bugId) {
+    let data = await dbContext.Notes.find({ bugId: bugId });
     if (!data) {
       throw new BadRequest("Invalid Id");
     }

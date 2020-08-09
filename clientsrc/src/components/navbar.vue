@@ -54,7 +54,7 @@
       </span>
     </div>
     <QuickModal id="one">
-      <form slot="body" @submit="reportBug">
+      <form slot="body" @submit.prevent="reportBug">
         <div class="form-group">
           <input
             type="text"

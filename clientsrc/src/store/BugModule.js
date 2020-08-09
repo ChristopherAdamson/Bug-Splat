@@ -1,4 +1,4 @@
-import api from "../store/AxiosService"
+import { api } from "../store/AxiosService"
 import router from '../router/index'
 
 
@@ -12,8 +12,25 @@ export default {
 
   },
   actions: {
-    addBug({ commit, dispatch }, payload) {
-      console.log(payload);
-    }
+    async getBugs({ commit, dispatch }) {
+      let res = await api.get("bugs")
+      console.log(res.data);
+      commit("setBugs", res.data)
+    },
+    async getBugDetails({ commit, dispatch }, id) {
+      let res = await api.get("bugs/" + id)
+      console.log(res)
+      commit("setBugDetails", res.data)
+    },
+
+    async addBug({ commit, dispatch }, payload) {
+      let res = await api.post("bugs", payload)
+      console.log(res.data);
+      dispatch("getBugs", res.data)
+    },
+
+
+
+
   }
 }

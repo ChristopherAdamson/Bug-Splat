@@ -1,29 +1,31 @@
 <template>
-  <div class="home row justify-space-around bg-danger pt-3">
-    <div class="col-3">
-      <h5>Title</h5>
-    </div>
-    <div class="col-3">
-      <h5>Reported By</h5>
-    </div>
-    <div class="col-3">
-      <!-- make status toggle closed and open top to bottom -->
-      <h5 v-if="noToggle">
-        Status
-        <i class="fa fa-arrow-right"></i>
-      </h5>
-    </div>
-    <div class="col-3">
-      <h5>lastModified</h5>
+  <div class="home bg-danger rounded pt-3">
+    <div class="row mx-2 p-3 justify-space-around border border-dark">
+      <div class="col-3">
+        <h4>Title</h4>
+      </div>
+      <div class="col-3">
+        <h4>Reported By</h4>
+      </div>
+      <div class="col-3">
+        <!-- make status toggle closed and open top to bottom -->
+        <h4 v-if="noToggle">
+          Status
+          <i class="fa fa-arrow-right"></i>
+        </h4>
+      </div>
+      <div class="col-3">
+        <h4>lastModified</h4>
+      </div>
     </div>
     <div class="overflow-auto f-height">
-      <!-- add bug component here -->
+      <bugComponent v-for="bug in bugs" :bugData="bug" :key="bug._id" />
     </div>
   </div>
 </template>
 
 <script>
-import bug from "../components/bug";
+import bugComponent from "../components/bug";
 export default {
   name: "home",
   data() {
@@ -32,10 +34,17 @@ export default {
       sortToggle: false,
     };
   },
-  computed: {},
+  mounted() {
+    this.$store.dispatch("getBugs");
+  },
+  computed: {
+    bugs() {
+      return this.$store.state.bugs;
+    },
+  },
   methods: {},
   components: {
-    bug,
+    bugComponent,
   },
 };
 </script>
@@ -46,7 +55,8 @@ export default {
   height: 90vh;
 }
 .f-height {
-  height: 80vh;
-  max-height: 80vh;
+  height: 40rem;
+  max-height: 40rem;
+  width: auto;
 }
 </style>

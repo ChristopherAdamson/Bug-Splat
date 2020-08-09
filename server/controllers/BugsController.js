@@ -6,11 +6,13 @@ import auth0Provider from "@bcwdev/auth0provider";
 export class BugsController extends BaseController {
 
 
+
   constructor() {
     super("api/bugs");
     this.router
       .get("", this.getAll)
       // NOTE: Beyond this point all routes require Authorization tokens (the user must be logged in)
+      .get("/:id", this.getById)
       .use(auth0Provider.getAuthorizedUserInfo)
       .post("", this.create)
       .delete("/:id", this.delete)
@@ -18,15 +20,25 @@ export class BugsController extends BaseController {
   }
   async getAll(req, res, next) {
     try {
-      return res.send(["value1", "value2"]);
+      let data = await bugsService.findAll()
+      res.send(data)
     } catch (error) {
       next(error);
+    }
+  }
+  async getById(req, res, next) {
+    try {
+      let data = await bugsService.findById(req.params.id)
+      res.send(data)
+    } catch (error) {
+      next(error)
+
     }
   }
   async create(req, res, next) {
     try {
       // NOTE NEVER TRUST THE CLIENT TO ADD THE CREATOR ID
-      req.body.creator = req.user.email;
+      req.body.creatorEmail = req.userInfo.email;
       let newbug = await bugsService.addBug(req.body)
       res.send(req.body);
     } catch (error) {
@@ -41,7 +53,7 @@ export class BugsController extends BaseController {
   }
   async edit(req, res, next) {
     try {
-      req.body.creator = req.user.email;
+      req.body.creatorEmail = req.userInfo.email;
       let data = await bugsService.editBug(req.params.id, req.userInfo.email, req.body)
       res.send(data)
     } catch (error) { next(error) }

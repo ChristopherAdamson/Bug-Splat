@@ -10,11 +10,19 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    profile: {}
+    profile: {},
+    bugs: [],
+    activeBug: {}
   },
   mutations: {
     setProfile(state, profile) {
       state.profile = profile;
+    },
+    setBugs(state, bugs) {
+      state.bugs = bugs
+    },
+    setBugDetails(state, bugData) {
+      state.activeBug = bugData
     }
   },
   actions: {

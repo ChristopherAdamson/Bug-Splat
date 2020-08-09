@@ -43,17 +43,10 @@
     <QuickModal id="two">
       <form slot="body" @submit.prevent="addNote">
         <div class="form-group">
-          <input
-            type="text"
-            class="form-control w-75"
-            v-model="bugTitle"
-            placeholder="Title of the bug?"
-            required
-          />
           <textarea
-            v-model="bugBody"
+            v-model="noteContent"
             class="form-control box-size mt-3"
-            placeholder="short description of the bug"
+            placeholder="Comment on the bug?"
             aria-label="With textarea"
             required
           ></textarea>
@@ -70,7 +63,9 @@ import QuickModal from "../components/QuickModals";
 export default {
   name: "bugDetails",
   data() {
-    return {};
+    return {
+      noteContent: "",
+    };
   },
   mounted() {
     this.$store.dispatch("getBugDetails", this.$route.params.id);
@@ -80,8 +75,18 @@ export default {
       return this.$store.state.activeBug;
     },
   },
-  methods: {},
-  components: {},
+  methods: {
+    addNote() {
+      let payload = {
+        content: this.noteContent,
+        bugId: this.$route.params.id,
+      };
+      this.$store.dispatch("addNote", payload);
+    },
+  },
+  components: {
+    QuickModal,
+  },
 };
 </script>
 

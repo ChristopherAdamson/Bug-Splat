@@ -3,6 +3,7 @@ import Vuex from "vuex";
 import router from "../router";
 import { api } from "./AxiosService"
 import bugModule from "../store/BugModule"
+import noteModule from "../store/NoteModule"
 
 Vue.use(Vuex);
 
@@ -42,6 +43,7 @@ export default new Vuex.Store({
     }
   },
   modules: {
-    bugModule
+    bugModule,
+    noteModule
   }
 });

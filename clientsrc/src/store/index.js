@@ -13,7 +13,8 @@ export default new Vuex.Store({
   state: {
     profile: {},
     bugs: [],
-    activeBug: {}
+    activeBug: {},
+    notes: {}
   },
   mutations: {
     setProfile(state, profile) {
@@ -24,6 +25,9 @@ export default new Vuex.Store({
     },
     setBugDetails(state, bugData) {
       state.activeBug = bugData
+    },
+    setNotes(state, data) {
+      Vue.set(state.notes, data.bugId, data.notes)
     }
   },
   actions: {

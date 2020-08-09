@@ -29,8 +29,22 @@ export default {
       dispatch("getBugs", res.data)
     },
 
+    async deleteBug({ commit, dispatch }, payload) {
+      let res = await api.delete("bugs/" + payload.bugId)
+      dispatch("getBugs")
+    },
+    async editBug({ commit, dispatch }, payload) {
+      let res = await api.put("bugs/" + payload.bugId, payload.body)
+      dispatch("getBugDetails", payload.bugId)
+    }
+
+
+
+
 
 
 
   }
+
+
 }

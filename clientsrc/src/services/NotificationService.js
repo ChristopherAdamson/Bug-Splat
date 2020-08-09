@@ -2,14 +2,14 @@
 import swal from "sweetalert2"
 export default class NotificationService {
 
-  static async confirmAction(title = "Are you sure?") {
+  static async confirmAction(title = "Are you sure?", confirmButtonText = 'Yes, delete it!') {
     try {
       let res = await swal.fire({
         title: title,
         text: "You won't be able to revert this!",
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Yes, delete it!',
+        confirmButtonText: confirmButtonText,
         cancelButtonText: 'No, cancel!',
       })
       if (res.value) {

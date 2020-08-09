@@ -35,7 +35,7 @@ export default {
       dispatch("getBugs")
     },
     async editBug({ commit, dispatch }, payload) {
-      let res = await api.put("bugs/" + payload.bugId, payload.body)
+      let res = await api.put("bugs/" + payload.bugId, payload)
       dispatch("getBugDetails", payload.bugId)
     }
 

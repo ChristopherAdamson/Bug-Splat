@@ -8,7 +8,11 @@
       </div>
       <div class="col-5 text-right">
         <button @click="deleteBug" class="btn btn-warning mx-1 fixed right">Delete</button>
-        <button @click="closeReport" class="btn btn-secondary mx-1 fixed-right">Close Bug Report</button>
+        <button
+          :disabled="bug.closed ? true : false "
+          @click="closeReport"
+          class="btn btn-secondary mx-1 fixed-right"
+        >Close Bug Report</button>
         <h4 class="text-secondary mt-5 mr-2" v-if="!bug.closed">Open</h4>
         <h4 class="text-success mt-5 mr-2" v-if="bug.closed">Closed</h4>
       </div>
@@ -35,6 +39,7 @@
     <div class="row">
       <div class="col-2 offset-9 mt-3">
         <button
+          :disabled="bug.closed ? true : false "
           v-if="$auth.isAuthenticated"
           data-toggle="modal"
           data-target="#two"
@@ -61,6 +66,7 @@
 
 
 <script>
+import ns from "../services/NotificationService";
 import QuickModal from "../components/QuickModals";
 export default {
   name: "bugDetails",
@@ -85,21 +91,31 @@ export default {
         bugId: this.$route.params.id,
       };
       this.$store.dispatch("addNote", payload);
+      $("#two").modal("hide");
+      this.content = "";
     },
-    deleteBug() {
+    async deleteBug() {
       let payload = {
         bugId: this.$route.params.id,
       };
-      this.$store.dispatch("deleteBug", payload);
-
-      this.$router.push({ name: "Home" });
+      if (await ns.confirmAction("Are you sure?")) {
+        this.$store.dispatch("deleteBug", payload);
+        this.$router.push({ name: "Home" });
+      }
     },
-    closeReport() {
+    async closeReport() {
       let payload = {
         bugId: this.$route.params.id,
         closed: true,
       };
-      this.$store.dispatch("editBug", payload);
+      if (
+        await ns.confirmAction(
+          "Are you sure? \n Once closed you cannot edit the information",
+          "Yes! Close this report!"
+        )
+      ) {
+        this.$store.dispatch("editBug", payload);
+      }
     },
   },
   components: {

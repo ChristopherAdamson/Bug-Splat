@@ -2,10 +2,9 @@
   <div class="bugDetails container bg-danger rounded pt-3 f-height">
     <div class="row">
       <div class="col-7">
-        <h5 v-show="!wasEdited">did it work</h5>
-        <h5 v-show="wasEdited" v-if="!editContent">{{titleContent}}</h5>
+        <h1 v-show="!wasEdited">{{bug.title}}</h1>
+        <h1 v-show="wasEdited" v-if="!editContent">{{titleContent}}</h1>
         <input v-if="editContent" type="text" class="form-control" v-model="titleContent" required />
-        <h1>{{bug.title}}</h1>
         <h4>Reported By: {{bug.creatorEmail}}</h4>
       </div>
       <div class="col-5 text-right">
@@ -18,9 +17,9 @@
         <button
           v-if="editContent"
           :disabled="bug.closed ? true : false "
-          @click="editBug, editContent = !editContent"
+          @click="saveBug"
           class="btn btn-primary mx-1 fixed-right"
-        >Save</button>
+        >Save Bug Report</button>
         <button @click="deleteBug" class="btn btn-success mx-1 fixed right">Delete</button>
         <button
           :disabled="bug.closed ? true : false "
@@ -33,10 +32,14 @@
     </div>
     <div class="row mt-3 ml-5">
       <div v-show="!wasEdited" class="col-10 ml-5 desc-box border rounded border-dark">
-        <p>{{bodyContent}}</p>
+        <h5>{{bug.description}}</h5>
       </div>
-      <div v-if="!editContent" class="col-10 ml-5 desc-box border rounded border-dark">
-        <p>{{bodyContent}}</p>
+      <div
+        v-show="wasEdited"
+        v-if="!editContent"
+        class="col-10 ml-5 desc-box border rounded border-dark"
+      >
+        <h5>{{bodyContent}}</h5>
       </div>
       <div v-if="editContent" class="col-10 ml-5 desc-box border rounded border-dark">
         <input type="text" class="form-control" v-model="bodyContent" required />
@@ -157,9 +160,17 @@ export default {
         this.titleContent = this.bug.title;
         this.bodyContent = this.bug.description;
       }
-
       this.editContent = !this.editContent;
       this.wasEdited = true;
+    },
+    saveBug() {
+      let payload = {
+        title: this.titleContent,
+        description: this.bodyContent,
+        bugId: this.bug._id,
+      };
+      this.editContent = !this.editContent;
+      this.$store.dispatch("editBug", payload);
     },
   },
   components: {

@@ -1,6 +1,6 @@
 <template>
   <div :class="bugsIndex % 2 ? '' : 'bg-shift' ">
-    <div class="bug row mx-2 my-2">
+    <div class="bug row align-items-center mx-2 my-2">
       <div class="col-3">
         <h5 class="pointer" @click="goToBugDetails">{{bugData.title}}</h5>
       </div>

@@ -1,5 +1,5 @@
 <template>
-  <div :class="counterData % 2 ? '' : 'bg-shift' ">
+  <div :class="noteIndex % 2 ? '' : 'bg-shift' ">
     <div class="notes align-items-center row mx-2 my-2">
       <div class="col-4">
         <h5>{{noteData.creatorEmail}}</h5>
@@ -9,7 +9,11 @@
       </div>
 
       <div class="col-1">
-        <button class="btn btn-info btn-sm float-right">
+        <button
+          v-if="profile.email == noteData.creatorEmail"
+          @click="deleteNote"
+          class="btn btn-info btn-sm float-right"
+        >
           <i class="fa fa-trash-o"></i>
         </button>
       </div>
@@ -19,15 +23,31 @@
 
 
 <script>
+import ns from "../services/NotificationService";
+
 export default {
   name: "notes",
   data() {
     return {};
   },
   mounted() {},
-  props: ["noteData", "counterData"],
-  computed: {},
-  methods: {},
+  props: ["noteData", "noteIndex"],
+  computed: {
+    profile() {
+      return this.$store.state.profile;
+    },
+  },
+  methods: {
+    async deleteNote() {
+      let payload = {
+        bugId: this.noteData.bugId,
+        noteId: this.noteData._id,
+      };
+      if (await ns.confirmAction("Are you sure?")) {
+        this.$store.dispatch("deleteNote", payload);
+      }
+    },
+  },
   components: {},
 };
 </script>

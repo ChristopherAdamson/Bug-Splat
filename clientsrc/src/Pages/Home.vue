@@ -11,7 +11,7 @@
         <!-- make status toggle closed and open top to bottom -->
         <h4 v-if="noToggle">
           Status
-          <i class="fa fa-arrow-right"></i>
+          <i @click="direction == 'up'" class="fa fa-arrow-right"></i>
         </h4>
       </div>
       <div class="col-3">
@@ -32,6 +32,7 @@ export default {
     return {
       noToggle: true,
       sortToggle: false,
+      direction: "",
     };
   },
   mounted() {
@@ -39,7 +40,18 @@ export default {
   },
   computed: {
     bugs() {
-      return this.$store.state.bugs;
+      let sortedBugs = [...this.$store.state.bugs];
+      if (this.direction == "up") {
+        sortedBugs.sort((a, b) => {
+          return a.closed === b.closed ? 0 : a ? -1 : 1;
+        });
+      } else if (this.direction == "down") {
+        sortedBugs.sort((a, b) => {
+          return a.closed === b.closed ? 0 : a ? 1 : -1;
+        });
+      } else {
+        return this.$store.state.bugs;
+      }
     },
   },
   methods: {},

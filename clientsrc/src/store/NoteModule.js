@@ -31,12 +31,12 @@ export default {
 
     async deleteNote({ commit, dispatch }, payload) {
       let res = await api.delete("bugs/" + payload.bugId + "/notes/" + payload.noteId)
-      dispatch("getNotes")
+      dispatch("getNotes", payload.bugId)
     },
 
     async editNote({ commit, dispatch }, payload) {
       let res = await api.put("bugs/" + payload.bugId + "/notes/" + payload.noteId, payload.body)
-      dispatch("getNotes")
+      dispatch("getNotes", payload.butId)
     }
 
 

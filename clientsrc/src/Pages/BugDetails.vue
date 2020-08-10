@@ -10,24 +10,24 @@
       </div>
       <div class="col-5 text-right">
         <button
-          v-if="!editContent && $auth.isAuthenticated"
+          v-if="!editContent && profile.email == bug.creatorEmail"
           :disabled="bug.closed ? true : false "
           @click="editBug"
           class="btn btn-primary mx-1 fixed-right"
         >Edit Bug Report</button>
         <button
-          v-if="editContent && $auth.isAuthenticated"
+          v-if="editContent && profile.email == bug.creatorEmail"
           :disabled="bug.closed ? true : false "
           @click="saveBug"
           class="btn btn-primary mx-1 fixed-right"
         >Save Bug Report</button>
         <button
-          v-if="$auth.isAuthenticated"
+          v-if="profile.email == bug.creatorEmail"
           @click="deleteBug"
           class="btn btn-success mx-1 fixed right"
         >Delete</button>
         <button
-          v-if="$auth.isAuthenticated"
+          v-if="profile.email == bug.creatorEmail"
           :disabled="bug.closed ? true : false "
           @click="closeReport"
           class="btn btn-secondary mx-1 fixed-right"
@@ -37,18 +37,30 @@
       </div>
     </div>
     <div class="row mt-3 ml-5">
-      <div v-show="!wasEdited" class="col-10 ml-5 desc-box border rounded border-dark">
+      <div
+        v-show="!wasEdited"
+        class="col-10 ml-5 desc-box border rounded border-dark overflow-auto"
+      >
         <h5>{{bug.description}}</h5>
       </div>
       <div
         v-show="wasEdited"
         v-if="!editContent"
-        class="col-10 ml-5 desc-box border rounded border-dark"
+        class="col-10 ml-5 desc-box border rounded border-dark overflow-auto"
       >
         <h5>{{bodyContent}}</h5>
       </div>
-      <div v-if="editContent" class="col-10 ml-5 desc-box border rounded border-dark">
-        <input type="text" class="form-control" v-model="bodyContent" required />
+      <div
+        v-if="editContent"
+        class="col-10 input-group-prepend ml-5 desc-box border rounded border-dark"
+      >
+        <textarea
+          type="text"
+          class="form-control desc-box text-overflow"
+          v-model="bodyContent"
+          requiredcols="30"
+          rows="10"
+        ></textarea>
       </div>
     </div>
     <div class="mx-5 mt-3 row bg-white rounded border border-dark">
@@ -63,9 +75,9 @@
       </div>
       <div class="overflow-auto col-12 note-height">
         <noteComponent
-          v-for="note in notes"
-          :counterData="counter++"
+          v-for="(note, index) in notes"
           :noteData="note"
+          :noteIndex="index"
           :key="note._id"
         />
       </div>
@@ -74,7 +86,7 @@
       <div class="col-2 offset-9 mt-3">
         <button
           :disabled="bug.closed ? true : false "
-          v-if="$auth.isAuthenticated"
+          v-if="profile.email == bug.creatorEmail"
           data-toggle="modal"
           data-target="#two"
           class="btn btn-warning"
@@ -108,7 +120,6 @@ export default {
   data() {
     return {
       noteContent: "",
-      counter: 0,
       editContent: false,
       titleContent: "",
       bodyContent: "",
@@ -126,6 +137,9 @@ export default {
     notes() {
       return this.$store.state.notes[this.$route.params.id];
     },
+    profile() {
+      return this.$store.state.profile;
+    },
   },
   methods: {
     addNote() {
@@ -133,7 +147,6 @@ export default {
         content: this.noteContent,
         bugId: this.$route.params.id,
       };
-      debugger;
       this.noteContent = "";
       this.$store.dispatch("addNote", payload);
       $("#two").modal("hide");

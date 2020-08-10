@@ -63,6 +63,7 @@ export class BugsController extends BaseController {
   async deleteNote(req, res, next) {
     try {
       let data = await notesService.deleteNote(req.params.bugId, req.params.noteId)
+      res.send("deleted")
     } catch (error) { next(error) }
   }
 

@@ -4,6 +4,7 @@ import router from '../router/index'
 
 
 
+
 export default {
   state: {
 
@@ -27,6 +28,7 @@ export default {
       let res = await api.post("bugs", payload)
       console.log(res.data);
       dispatch("getBugs", res.data)
+      router.push({ name: "Bug", params: { id: res.data._id } })
     },
 
     async deleteBug({ commit, dispatch }, payload) {

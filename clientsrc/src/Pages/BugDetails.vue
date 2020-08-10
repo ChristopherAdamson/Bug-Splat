@@ -1,27 +1,33 @@
+
 <template>
   <div class="bugDetails container bg-danger rounded pt-3 f-height">
     <div class="row">
       <div class="col-7">
         <h1 v-show="!wasEdited">{{bug.title}}</h1>
-        <h1 v-show="wasEdited" v-if="!editContent">{{titleContent}}</h1>
+        <h1 v-show="wasEdited" v-if="!editContent ">{{titleContent}}</h1>
         <input v-if="editContent" type="text" class="form-control" v-model="titleContent" required />
         <h4>Reported By: {{bug.creatorEmail}}</h4>
       </div>
       <div class="col-5 text-right">
         <button
-          v-if="!editContent"
+          v-if="!editContent && $auth.isAuthenticated"
           :disabled="bug.closed ? true : false "
           @click="editBug"
           class="btn btn-primary mx-1 fixed-right"
         >Edit Bug Report</button>
         <button
-          v-if="editContent"
+          v-if="editContent && $auth.isAuthenticated"
           :disabled="bug.closed ? true : false "
           @click="saveBug"
           class="btn btn-primary mx-1 fixed-right"
         >Save Bug Report</button>
-        <button @click="deleteBug" class="btn btn-success mx-1 fixed right">Delete</button>
         <button
+          v-if="$auth.isAuthenticated"
+          @click="deleteBug"
+          class="btn btn-success mx-1 fixed right"
+        >Delete</button>
+        <button
+          v-if="$auth.isAuthenticated"
           :disabled="bug.closed ? true : false "
           @click="closeReport"
           class="btn btn-secondary mx-1 fixed-right"
@@ -179,7 +185,7 @@ export default {
   },
 };
 </script>
-
+TODO // all buttons alter info check to see if its the same user as the one who created it
 
 <style scoped>
 .f-height {

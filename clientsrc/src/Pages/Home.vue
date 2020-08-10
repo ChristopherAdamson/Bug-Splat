@@ -9,9 +9,17 @@
       </div>
       <div class="col-3">
         <!-- make status toggle closed and open top to bottom -->
-        <h4 v-if="noToggle">
+        <h4 v-if="direction == 'right'">
           Status
-          <i @click="direction == 'up'" class="fa fa-arrow-right"></i>
+          <i @click="direction = 'up'" class="fa fa-arrow-right"></i>
+        </h4>
+        <h4 v-if="direction == 'up'">
+          Status
+          <i @click="direction = 'down'" class="fa fa-arrow-up"></i>
+        </h4>
+        <h4 v-if="direction == 'down'">
+          Status
+          <i @click="direction = 'up'" class="fa fa-arrow-down"></i>
         </h4>
       </div>
       <div class="col-3">
@@ -19,7 +27,7 @@
       </div>
     </div>
     <div class="overflow-auto f-height">
-      <bugComponent v-for="bug in bugs" :bugData="bug" :key="bug._id" />
+      <bugComponent v-for="(bug, index) in bugs" :bugIndex="index" :bugData="bug" :key="bug._id" />
     </div>
   </div>
 </template>
@@ -32,7 +40,7 @@ export default {
     return {
       noToggle: true,
       sortToggle: false,
-      direction: "",
+      direction: "right",
     };
   },
   mounted() {
@@ -42,14 +50,14 @@ export default {
     bugs() {
       let sortedBugs = [...this.$store.state.bugs];
       if (this.direction == "up") {
-        sortedBugs.sort((a, b) => {
-          return a.closed === b.closed ? 0 : a ? -1 : 1;
+        return sortedBugs.sort((a, b) => {
+          return a.closed === b.closed ? 0 : a.closed ? -1 : 1;
         });
       } else if (this.direction == "down") {
-        sortedBugs.sort((a, b) => {
-          return a.closed === b.closed ? 0 : a ? 1 : -1;
+        return sortedBugs.sort((a, b) => {
+          return a.closed === b.closed ? 0 : a.closed ? 1 : -1;
         });
-      } else {
+      } else if (this.direction == "right") {
         return this.$store.state.bugs;
       }
     },

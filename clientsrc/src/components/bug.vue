@@ -1,5 +1,5 @@
 <template>
-  <div :class="bugsIndex % 2 ? '' : 'bg-shift' ">
+  <div :class="bugIndex % 2 ? '' : 'bg-shift' ">
     <div class="bug row align-items-center mx-2 my-2">
       <div class="col-3">
         <h5 class="pointer" @click="goToBugDetails">{{bugData.title}}</h5>
@@ -32,15 +32,8 @@ export default {
   mounted() {
     this.newDate = this.bugData.updatedAt.split("T");
   },
-  props: ["bugData"],
-  computed: {
-    bugsIndex() {
-      let foundIndex = this.$store.state.bugs.findIndex(
-        (bug) => bug._id == this.bugData._id
-      );
-      return foundIndex;
-    },
-  },
+  props: ["bugData", "bugIndex"],
+  computed: {},
   methods: {
     goToBugDetails() {
       this.$router.push({ name: "Bug", params: { id: this.bugData._id } });

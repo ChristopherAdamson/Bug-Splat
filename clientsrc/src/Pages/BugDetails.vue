@@ -2,12 +2,26 @@
   <div class="bugDetails container bg-danger rounded pt-3 f-height">
     <div class="row">
       <div class="col-7">
-        <h5>Title</h5>
+        <h5 v-show="!wasEdited">did it work</h5>
+        <h5 v-show="wasEdited" v-if="!editContent">{{titleContent}}</h5>
+        <input v-if="editContent" type="text" class="form-control" v-model="titleContent" required />
         <h1>{{bug.title}}</h1>
         <h4>Reported By: {{bug.creatorEmail}}</h4>
       </div>
       <div class="col-5 text-right">
-        <button @click="deleteBug" class="btn btn-warning mx-1 fixed right">Delete</button>
+        <button
+          v-if="!editContent"
+          :disabled="bug.closed ? true : false "
+          @click="editBug"
+          class="btn btn-primary mx-1 fixed-right"
+        >Edit Bug Report</button>
+        <button
+          v-if="editContent"
+          :disabled="bug.closed ? true : false "
+          @click="editBug, editContent = !editContent"
+          class="btn btn-primary mx-1 fixed-right"
+        >Save</button>
+        <button @click="deleteBug" class="btn btn-success mx-1 fixed right">Delete</button>
         <button
           :disabled="bug.closed ? true : false "
           @click="closeReport"
@@ -18,22 +32,33 @@
       </div>
     </div>
     <div class="row mt-3 ml-5">
-      <div class="col-10 ml-5 desc-box border rounded border-dark">
-        <p>{{bug.description}}</p>
+      <div v-show="!wasEdited" class="col-10 ml-5 desc-box border rounded border-dark">
+        <p>{{bodyContent}}</p>
+      </div>
+      <div v-if="!editContent" class="col-10 ml-5 desc-box border rounded border-dark">
+        <p>{{bodyContent}}</p>
+      </div>
+      <div v-if="editContent" class="col-10 ml-5 desc-box border rounded border-dark">
+        <input type="text" class="form-control" v-model="bodyContent" required />
       </div>
     </div>
     <div class="mx-5 mt-3 row bg-white rounded border border-dark">
-      <div class="col-2">
+      <div class="col-4">
         <h5>Name</h5>
       </div>
       <div class="col-2">
         <h5>Message</h5>
       </div>
-      <div class="col-8 text-right">
+      <div class="col-6 text-right">
         <h5 class="mr-2">Delete</h5>
       </div>
-      <div class="overflow-auto note-height">
-        <noteComponent v-for="note in notes" :counter="counter++" :noteData="note" :key="note._id" />
+      <div class="overflow-auto col-12 note-height">
+        <noteComponent
+          v-for="note in notes"
+          :counterData="counter++"
+          :noteData="note"
+          :key="note._id"
+        />
       </div>
     </div>
     <div class="row">
@@ -75,6 +100,10 @@ export default {
     return {
       noteContent: "",
       counter: 0,
+      editContent: false,
+      titleContent: "",
+      bodyContent: "",
+      wasEdited: false,
     };
   },
   mounted() {
@@ -86,7 +115,7 @@ export default {
       return this.$store.state.activeBug;
     },
     notes() {
-      return this.$store.state.notes;
+      return this.$store.state.notes[this.$route.params.id];
     },
   },
   methods: {
@@ -95,9 +124,10 @@ export default {
         content: this.noteContent,
         bugId: this.$route.params.id,
       };
+      debugger;
+      this.noteContent = "";
       this.$store.dispatch("addNote", payload);
       $("#two").modal("hide");
-      this.content = "";
     },
     async deleteBug() {
       let payload = {
@@ -121,6 +151,15 @@ export default {
       ) {
         this.$store.dispatch("editBug", payload);
       }
+    },
+    editBug() {
+      if (!this.titleContent) {
+        this.titleContent = this.bug.title;
+        this.bodyContent = this.bug.description;
+      }
+
+      this.editContent = !this.editContent;
+      this.wasEdited = true;
     },
   },
   components: {

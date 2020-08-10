@@ -1,19 +1,17 @@
 <template>
-  <div :class="counter % 2 ? '' : 'bg-shift' ">
-    <div class="notes row mx-2 my-2">
-      <div class="col-3">
-        <h5>dummy text</h5>
+  <div :class="counterData % 2 ? '' : 'bg-shift' ">
+    <div class="notes align-items-center row mx-2 my-2">
+      <div class="col-4">
+        <h5>{{noteData.creatorEmail}}</h5>
       </div>
-      <div class="col-3">
-        <h5>dummy text</h5>
-      </div>
-
-      <div class="col-3">
-        <h5>dummy text</h5>
+      <div class="col-7 text-jusitfy max-h overflow-auto">
+        <h5>{{noteData.content}}</h5>
       </div>
 
-      <div class="col-3">
-        <h5>dummy text</h5>
+      <div class="col-1">
+        <button class="btn btn-info btn-sm float-right">
+          <i class="fa fa-trash-o"></i>
+        </button>
       </div>
     </div>
   </div>
@@ -24,12 +22,10 @@
 export default {
   name: "notes",
   data() {
-    return {
-      newDate: [],
-    };
+    return {};
   },
   mounted() {},
-  props: ["noteData", "counter"],
+  props: ["noteData", "counterData"],
   computed: {},
   methods: {},
   components: {},
@@ -43,5 +39,9 @@ export default {
 }
 .pointer {
   cursor: pointer;
+}
+.max-h {
+  height: 50px;
+  max-height: 50px;
 }
 </style>

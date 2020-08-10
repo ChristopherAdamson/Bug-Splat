@@ -28,6 +28,7 @@ export default new Vuex.Store({
     },
     setNotes(state, data) {
       Vue.set(state.notes, data.bugId, data.notes)
+
     }
   },
   actions: {

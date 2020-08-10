@@ -78,6 +78,7 @@
           v-for="(note, index) in notes"
           :noteData="note"
           :noteIndex="index"
+          :reportStatus="bug.closed"
           :key="note._id"
         />
       </div>

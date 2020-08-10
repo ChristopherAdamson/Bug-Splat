@@ -10,6 +10,7 @@
 
       <div class="col-1">
         <button
+          :disabled="reportStatus ? true : false "
           v-if="profile.email == noteData.creatorEmail"
           @click="deleteNote"
           class="btn btn-info btn-sm float-right"
@@ -31,7 +32,7 @@ export default {
     return {};
   },
   mounted() {},
-  props: ["noteData", "noteIndex"],
+  props: ["noteData", "noteIndex", "reportStatus"],
   computed: {
     profile() {
       return this.$store.state.profile;
